@@ -1,6 +1,6 @@
 <?php
 $aplicacao = 'Cadastro de Livros';
-$menu = [];
+$menu = ['/autores' => 'Autores'];
 ?>
 <!doctype html>
 <html lang="pt-BR">
