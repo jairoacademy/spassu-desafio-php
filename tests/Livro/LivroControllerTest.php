@@ -29,6 +29,14 @@ final class LivroControllerTest extends TestCase
         $this->http = new Http(fn(): array => $rotas($banco, $view, $this->sessao), $this->sessao, $view);
     }
 
+    public function testRaizRedirecionaParaLivros(): void
+    {
+        $resposta = $this->visitar('/');
+
+        self::assertSame(303, $resposta->status);
+        self::assertSame('/livros', $resposta->cabecalhos['Location']);
+    }
+
     public function testCriarERedirecionar(): void
     {
         self::assertSame(303, $this->enviar('/livros', $this->dados())->status);

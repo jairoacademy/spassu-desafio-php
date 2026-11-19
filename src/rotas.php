@@ -25,6 +25,7 @@ return static function (Banco $banco, View $view, Sessao $sessao): array {
     $livros = new LivroController($livroServico, $view, $sessao);
 
     return [
+        'GET /' => static fn(): Resposta => Resposta::redirecionar('/livros'),
         'GET /saude' => static function () use ($banco): Resposta {
             $banco->consultar('SELECT 1');
 
