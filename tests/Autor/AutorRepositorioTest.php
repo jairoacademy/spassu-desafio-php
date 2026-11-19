@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Autor;
 
 use App\Autor\AutorRepositorio;
 use PHPUnit\Framework\TestCase;
+use Tests\BancoDeTeste;
 
 final class AutorRepositorioTest extends TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Assunto;
 
 use App\Nucleo\Banco;
 use App\Nucleo\Http;
@@ -10,8 +10,9 @@ use App\Nucleo\Resposta;
 use App\Nucleo\Sessao;
 use App\Nucleo\View;
 use PHPUnit\Framework\TestCase;
+use Tests\BancoDeTeste;
 
-final class AutorControllerTest extends TestCase
+final class AssuntoControllerTest extends TestCase
 {
     private Banco $banco;
     private Sessao $sessao;
@@ -22,50 +23,50 @@ final class AutorControllerTest extends TestCase
         $_SESSION = [];
         $this->banco = BancoDeTeste::recriar();
         $this->sessao = new Sessao();
-        $view = new View($this->sessao, __DIR__ . '/../views');
-        $rotas = require __DIR__ . '/../src/rotas.php';
+        $view = new View($this->sessao, __DIR__ . '/../../views');
+        $rotas = require __DIR__ . '/../../src/rotas.php';
 
         $this->http = new Http(fn(): array => $rotas($this->banco, $view, $this->sessao), $this->sessao, $view);
     }
 
     public function testCriarERedirecionar(): void
     {
-        $resposta = $this->enviar('/autores', ['nome' => 'Fulano']);
+        $resposta = $this->enviar('/assuntos', ['descricao' => 'Fulano']);
 
         self::assertSame(303, $resposta->status);
-        self::assertStringContainsString('Fulano', $this->visitar('/autores')->corpo);
+        self::assertStringContainsString('Fulano', $this->visitar('/assuntos')->corpo);
     }
 
-    public function testNomeVazioRetorna422(): void
+    public function testDescricaoVaziaRetorna422(): void
     {
-        $resposta = $this->enviar('/autores', ['nome' => '']);
+        $resposta = $this->enviar('/assuntos', ['descricao' => '']);
 
         self::assertSame(422, $resposta->status);
-        self::assertStringContainsString('Informe o nome.', $resposta->corpo);
+        self::assertStringContainsString('Informe a descrição.', $resposta->corpo);
     }
 
     public function testAlterarERedirecionar(): void
     {
-        $this->enviar('/autores', ['nome' => 'Fulano']);
+        $this->enviar('/assuntos', ['descricao' => 'Fulano']);
 
-        self::assertSame(303, $this->enviar('/autores/1', ['nome' => 'Ciclano'])->status);
-        self::assertStringContainsString('Ciclano', $this->visitar('/autores')->corpo);
+        self::assertSame(303, $this->enviar('/assuntos/1', ['descricao' => 'Ciclano'])->status);
+        self::assertStringContainsString('Ciclano', $this->visitar('/assuntos')->corpo);
     }
 
     public function testEditarInexistenteRetorna404(): void
     {
-        self::assertSame(404, $this->visitar('/autores/99/editar')->status);
+        self::assertSame(404, $this->visitar('/assuntos/99/editar')->status);
     }
 
     public function testExcluirVinculadoMostraAviso(): void
     {
-        $this->enviar('/autores', ['nome' => 'Fulano']);
+        $this->enviar('/assuntos', ['descricao' => 'Fulano']);
         $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
-        $this->banco->executar('INSERT INTO Livro_Autor VALUES (1, 1)');
+        $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
         $this->sessao->consumirAviso();
 
-        self::assertSame(303, $this->enviar('/autores/1/excluir')->status);
-        self::assertStringContainsString('Autor vinculado', $this->visitar('/autores')->corpo);
+        self::assertSame(303, $this->enviar('/assuntos/1/excluir')->status);
+        self::assertStringContainsString('Assunto vinculado', $this->visitar('/assuntos')->corpo);
     }
 
     private function visitar(string $caminho): Resposta

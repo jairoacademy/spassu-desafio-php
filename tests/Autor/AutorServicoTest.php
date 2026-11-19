@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Autor;
 
 use App\Autor\AutorRepositorio;
 use App\Autor\AutorServico;
 use App\Nucleo\Banco;
 use App\Nucleo\ErroAplicacao;
 use PHPUnit\Framework\TestCase;
+use Tests\BancoDeTeste;
 
 final class AutorServicoTest extends TestCase
 {

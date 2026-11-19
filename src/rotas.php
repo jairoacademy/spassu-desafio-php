@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+use App\Assunto\AssuntoController;
+use App\Assunto\AssuntoRepositorio;
+use App\Assunto\AssuntoServico;
 use App\Autor\AutorController;
 use App\Autor\AutorRepositorio;
 use App\Autor\AutorServico;
@@ -11,6 +14,7 @@ use App\Nucleo\View;
 
 return static function (Banco $banco, View $view, Sessao $sessao): array {
     $autores = new AutorController(new AutorServico(new AutorRepositorio($banco)), $view, $sessao);
+    $assuntos = new AssuntoController(new AssuntoServico(new AssuntoRepositorio($banco)), $view, $sessao);
 
     return [
         'GET /saude' => static function () use ($banco): Resposta {
@@ -24,5 +28,11 @@ return static function (Banco $banco, View $view, Sessao $sessao): array {
         'GET /autores/{id}/editar' => $autores->editar(...),
         'POST /autores/{id}' => $autores->alterar(...),
         'POST /autores/{id}/excluir' => $autores->excluir(...),
+        'GET /assuntos' => $assuntos->listar(...),
+        'GET /assuntos/novo' => $assuntos->novo(...),
+        'POST /assuntos' => $assuntos->criar(...),
+        'GET /assuntos/{id}/editar' => $assuntos->editar(...),
+        'POST /assuntos/{id}' => $assuntos->alterar(...),
+        'POST /assuntos/{id}/excluir' => $assuntos->excluir(...),
     ];
 };
