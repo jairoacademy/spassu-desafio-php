@@ -1,0 +1,21 @@
+# Composer
+/vendor/
+
+# PHPUnit
+/.phpunit.cache/
+/coverage/
+
+# Ambiente
+.env
+.env.local
+
+# IDE
+/.idea/
+/.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

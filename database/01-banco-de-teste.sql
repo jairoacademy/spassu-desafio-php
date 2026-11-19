@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS livros_teste CHARACTER SET utf8mb4;
+GRANT ALL PRIVILEGES ON livros_teste.* TO 'app'@'%';

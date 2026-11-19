@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    init: true
+    ports:
+      - "127.0.0.1:8091:8091"
+    environment:
+      DB_DSN: mysql:host=db;dbname=livros;charset=utf8mb4
+      DB_USUARIO: app
+      DB_SENHA: app
+    volumes:
+      - .:/app
+      - /app/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: livros
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - dados:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uapp -papp --silent"]
+      interval: 5s
+      retries: 20
+
+volumes:
+  dados:
