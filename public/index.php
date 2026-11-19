@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
 
-header('Content-Type: application/json');
+use App\Nucleo\Http;
 
-echo json_encode(['status' => 'ok']);
+require __DIR__ . '/../vendor/autoload.php';
+
+$rotas = require __DIR__ . '/../src/rotas.php';
+
+new Http(static fn(): array => $rotas(require __DIR__ . '/../src/conexao.php'))->atender();
