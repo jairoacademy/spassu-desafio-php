@@ -18,33 +18,33 @@ final class AssuntoRepositorioTest extends TestCase
 
     public function testCriarEBuscar(): void
     {
-        $assunto = $this->assuntos->criar(['Descricao' => 'Fulano']);
+        $assunto = $this->assuntos->criar(['Descricao' => 'Romance']);
 
-        self::assertSame(['CodAssunto' => 1, 'Descricao' => 'Fulano'], $assunto);
+        self::assertSame(['CodAssunto' => 1, 'Descricao' => 'Romance'], $assunto);
         self::assertSame($assunto, $this->assuntos->buscar(1));
     }
 
     public function testDescricaoExistente(): void
     {
-        $this->assuntos->criar(['Descricao' => 'Fulano']);
+        $this->assuntos->criar(['Descricao' => 'Romance']);
 
-        self::assertTrue($this->assuntos->descricaoExistente('Fulano'));
-        self::assertFalse($this->assuntos->descricaoExistente('Ciclano'));
+        self::assertTrue($this->assuntos->descricaoExistente('Romance'));
+        self::assertFalse($this->assuntos->descricaoExistente('Poesia'));
     }
 
     public function testDescricaoExistenteIgnoraMaiuscula(): void
     {
-        $this->assuntos->criar(['Descricao' => 'Fulano']);
+        $this->assuntos->criar(['Descricao' => 'Romance']);
 
-        self::assertTrue($this->assuntos->descricaoExistente('FULANO'));
+        self::assertTrue($this->assuntos->descricaoExistente('ROMANCE'));
     }
 
     public function testDescricaoExistenteIgnoraProprioCodigo(): void
     {
-        $this->assuntos->criar(['Descricao' => 'Fulano']);
-        $this->assuntos->criar(['Descricao' => 'Ciclano']);
+        $this->assuntos->criar(['Descricao' => 'Romance']);
+        $this->assuntos->criar(['Descricao' => 'Poesia']);
 
-        self::assertFalse($this->assuntos->descricaoExistente('Fulano', 1));
-        self::assertTrue($this->assuntos->descricaoExistente('Fulano', 2));
+        self::assertFalse($this->assuntos->descricaoExistente('Romance', 1));
+        self::assertTrue($this->assuntos->descricaoExistente('Romance', 2));
     }
 }

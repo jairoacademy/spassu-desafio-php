@@ -23,7 +23,7 @@ final class AssuntoServicoTest extends TestCase
 
     public function testCriarFazTrim(): void
     {
-        self::assertSame('Fulano', $this->servico->criar('  Fulano ')['Descricao']);
+        self::assertSame('Romance', $this->servico->criar('  Romance ')['Descricao']);
     }
 
     public function testDescricaoVaziaRetorna422(): void
@@ -33,9 +33,9 @@ final class AssuntoServicoTest extends TestCase
 
     public function testDescricaoDuplicadaRetorna422(): void
     {
-        $this->servico->criar('Fulano');
+        $this->servico->criar('Romance');
 
-        self::assertSame(422, $this->capturarErro(fn() => $this->servico->criar('Fulano'))->status);
+        self::assertSame(422, $this->capturarErro(fn() => $this->servico->criar('Romance'))->status);
     }
 
     public function testBuscarInexistenteRetorna404(): void
@@ -45,7 +45,7 @@ final class AssuntoServicoTest extends TestCase
 
     public function testExcluirVinculadoRetorna409(): void
     {
-        $this->servico->criar('Fulano');
+        $this->servico->criar('Romance');
         $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
 

@@ -31,10 +31,10 @@ final class AssuntoControllerTest extends TestCase
 
     public function testCriarERedirecionar(): void
     {
-        $resposta = $this->enviar('/assuntos', ['descricao' => 'Fulano']);
+        $resposta = $this->enviar('/assuntos', ['descricao' => 'Romance']);
 
         self::assertSame(303, $resposta->status);
-        self::assertStringContainsString('Fulano', $this->visitar('/assuntos')->corpo);
+        self::assertStringContainsString('Romance', $this->visitar('/assuntos')->corpo);
     }
 
     public function testDescricaoVaziaRetorna422(): void
@@ -47,10 +47,10 @@ final class AssuntoControllerTest extends TestCase
 
     public function testAlterarERedirecionar(): void
     {
-        $this->enviar('/assuntos', ['descricao' => 'Fulano']);
+        $this->enviar('/assuntos', ['descricao' => 'Romance']);
 
-        self::assertSame(303, $this->enviar('/assuntos/1', ['descricao' => 'Ciclano'])->status);
-        self::assertStringContainsString('Ciclano', $this->visitar('/assuntos')->corpo);
+        self::assertSame(303, $this->enviar('/assuntos/1', ['descricao' => 'Poesia'])->status);
+        self::assertStringContainsString('Poesia', $this->visitar('/assuntos')->corpo);
     }
 
     public function testEditarInexistenteRetorna404(): void
@@ -60,7 +60,7 @@ final class AssuntoControllerTest extends TestCase
 
     public function testExcluirVinculadoMostraAviso(): void
     {
-        $this->enviar('/assuntos', ['descricao' => 'Fulano']);
+        $this->enviar('/assuntos', ['descricao' => 'Romance']);
         $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
         $this->sessao->consumirAviso();
