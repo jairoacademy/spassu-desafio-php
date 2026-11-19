@@ -15,7 +15,11 @@ final class BancoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->banco = new Banco((string) getenv('DB_DSN'), (string) getenv('DB_USUARIO'), (string) getenv('DB_SENHA'));
+        $this->banco = new Banco(
+            (string) getenv('DB_DSN'),
+            (string) getenv('DB_USUARIO'),
+            (string) getenv('DB_SENHA'),
+        );
         $this->banco->executar(
             'CREATE TEMPORARY TABLE registro (
                 id INT AUTO_INCREMENT PRIMARY KEY,

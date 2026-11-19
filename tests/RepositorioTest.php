@@ -13,7 +13,11 @@ final class RepositorioTest extends TestCase
 
     protected function setUp(): void
     {
-        $banco = new Banco((string) getenv('DB_DSN'), (string) getenv('DB_USUARIO'), (string) getenv('DB_SENHA'));
+        $banco = new Banco(
+            (string) getenv('DB_DSN'),
+            (string) getenv('DB_USUARIO'),
+            (string) getenv('DB_SENHA'),
+        );
         $banco->executar(
             'CREATE TEMPORARY TABLE registro (
                 codigo INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,14 +46,18 @@ final class RepositorioTest extends TestCase
 
     public function testCriarComIdInformado(): void
     {
-        self::assertSame(50, $this->registros->criar(['codigo' => 50, 'nome' => 'Fulano'])['codigo']);
+        $registro = $this->registros->criar(['codigo' => 50, 'nome' => 'Fulano']);
+
+        self::assertSame(50, $registro['codigo']);
     }
 
     public function testAlterar(): void
     {
         $this->registros->criar(['nome' => 'Fulano']);
 
-        self::assertSame(['codigo' => 1, 'nome' => 'Ciclano'], $this->registros->alterar(1, ['nome' => 'Ciclano']));
+        $registro = $this->registros->alterar(1, ['nome' => 'Ciclano']);
+
+        self::assertSame(['codigo' => 1, 'nome' => 'Ciclano'], $registro);
     }
 
     public function testExcluir(): void
@@ -67,8 +75,13 @@ final class RepositorioTest extends TestCase
             $this->registros->criar(['nome' => $nome]);
         }
 
-        self::assertSame(['Beltrano', 'Ciclano'], array_column($this->registros->listar(2, 1), 'nome'));
-        self::assertSame(['Fulano'], array_column($this->registros->listar(2, 2), 'nome'));
+        self::assertSame(['Beltrano', 'Ciclano'], $this->nomesDaPagina(1));
+        self::assertSame(['Fulano'], $this->nomesDaPagina(2));
         self::assertSame(3, $this->registros->contar());
+    }
+
+    private function nomesDaPagina(int $pagina): array
+    {
+        return array_column($this->registros->listar(2, $pagina), 'nome');
     }
 }
