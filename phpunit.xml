@@ -18,5 +18,6 @@
 
     <php>
         <env name="DB_DSN" value="mysql:host=db;dbname=livros_teste;charset=utf8mb4" force="true"/>
+        <ini name="error_log" value="/dev/null"/>
     </php>
 </phpunit>
