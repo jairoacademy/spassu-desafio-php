@@ -8,8 +8,10 @@ Projeto desenvolvido para um desafio técnico, em PHP 8.5 e MySQL 8.4.
 
 - `Banco`: PDO, consultas com parâmetros e transações
 - `Repositorio`: CRUD genérico, cada tabela herda dele
-- `Http`: rotas e tratamento de erros em um só lugar
-- `Requisicao` / `Resposta`: entrada e saída em JSON
+- `Http`: rotas, token dos formulários e página de erro em um só lugar
+- `Requisicao` / `Resposta`: entrada do formulário, saída em HTML ou JSON
+- `Sessao`: token CSRF e aviso de uma vez só
+- `View`: páginas PHP dentro do layout, com escape de HTML
 - `ErroAplicacao`: erro com status HTTP (404, 409, 422...)
 
 Testes:

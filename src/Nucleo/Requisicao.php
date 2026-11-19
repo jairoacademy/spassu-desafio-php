@@ -16,9 +16,8 @@ final readonly class Requisicao
     public static function capturar(): self
     {
         $caminho = (string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $corpo = json_decode((string) file_get_contents('php://input'), true);
 
-        return new self($_SERVER['REQUEST_METHOD'], $caminho, $_GET, is_array($corpo) ? $corpo : []);
+        return new self($_SERVER['REQUEST_METHOD'], $caminho, $_GET, $_POST);
     }
 
     public function texto(string $campo): string

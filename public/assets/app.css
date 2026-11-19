@@ -1,0 +1,32 @@
+:root {
+    --app-marca: #0f766e;
+    --app-marca-escura: #115e59;
+    --app-marca-rgb: 15, 118, 110;
+    --bs-body-color: #1f2937;
+    --bs-secondary-color: #4b5563;
+    --bs-link-color-rgb: var(--app-marca-rgb);
+}
+
+body {
+    background-color: #f8fafc;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--app-marca);
+    --bs-btn-border-color: var(--app-marca);
+    --bs-btn-hover-bg: var(--app-marca-escura);
+    --bs-btn-hover-border-color: var(--app-marca-escura);
+    --bs-btn-active-bg: var(--app-marca-escura);
+    --bs-btn-active-border-color: var(--app-marca-escura);
+    --bs-btn-disabled-bg: var(--app-marca);
+    --bs-btn-disabled-border-color: var(--app-marca);
+    --bs-btn-focus-shadow-rgb: var(--app-marca-rgb);
+}
+
+.menu-principal {
+    background-color: var(--app-marca-escura);
+}
+
+.erro-pagina {
+    max-width: 32rem;
+}

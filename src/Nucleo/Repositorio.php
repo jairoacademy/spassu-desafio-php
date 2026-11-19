@@ -17,7 +17,9 @@ abstract readonly class Repositorio
         $deslocamento = ($pagina - 1) * $limite;
 
         return $this->banco->consultar(
-            'SELECT * FROM ' . static::TABELA . ' ORDER BY ' . static::PK . " DESC LIMIT {$limite} OFFSET {$deslocamento}",
+            'SELECT * FROM ' . static::TABELA
+            . ' ORDER BY ' . static::PK . ' DESC'
+            . " LIMIT {$limite} OFFSET {$deslocamento}",
         );
     }
 

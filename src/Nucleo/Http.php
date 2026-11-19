@@ -8,8 +8,11 @@ use Throwable;
 
 final readonly class Http
 {
-    public function __construct(private Closure $montarRotas)
-    {
+    public function __construct(
+        private Closure $montarRotas,
+        private Sessao $sessao,
+        private View $view,
+    ) {
     }
 
     public function atender(): void
@@ -20,13 +23,22 @@ final readonly class Http
     public function processar(Requisicao $requisicao): Resposta
     {
         try {
+            $this->exigirToken($requisicao);
+
             return $this->executarRota($requisicao);
         } catch (ErroAplicacao $erro) {
-            return Resposta::json(['mensagem' => $erro->getMessage(), 'erros' => $erro->erros], $erro->status);
+            return $this->paginaDeErro($erro->status, $erro->getMessage());
         } catch (Throwable $erro) {
             error_log((string) $erro);
 
-            return Resposta::json(['mensagem' => 'Erro interno.'], 500);
+            return $this->paginaDeErro(500, 'Não foi possível concluir a operação.');
+        }
+    }
+
+    private function exigirToken(Requisicao $requisicao): void
+    {
+        if ($requisicao->metodo === 'POST' && !$this->sessao->tokenValido($requisicao->texto('_token'))) {
+            throw new ErroAplicacao('Sessão expirada. Recarregue a página e tente novamente.', 403);
         }
     }
 
@@ -41,5 +53,14 @@ final readonly class Http
         }
 
         throw ErroAplicacao::naoEncontrado('Página');
+    }
+
+    private function paginaDeErro(int $status, string $mensagem): Resposta
+    {
+        return $this->view->pagina('erro', [
+            'titulo' => "Erro {$status}",
+            'status' => $status,
+            'mensagem' => $mensagem,
+        ], $status);
     }
 }
