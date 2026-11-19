@@ -10,6 +10,11 @@ final readonly class AssuntoRepositorio extends Repositorio
     protected const string TABELA = 'Assunto';
     protected const string PK = 'CodAssunto';
 
+    public function todos(): array
+    {
+        return $this->banco->consultar('SELECT * FROM Assunto ORDER BY Descricao');
+    }
+
     public function descricaoExistente(string $descricao, int|string $ignorarCodigo = 0): bool
     {
         $sql = 'SELECT 1 FROM Assunto WHERE Descricao = ? AND CodAssunto <> ? LIMIT 1';

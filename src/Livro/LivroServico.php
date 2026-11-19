@@ -21,7 +21,12 @@ final readonly class LivroServico
 
     public function listar(int $limite = 20, int $pagina = 1): array
     {
-        return $this->livros->listar($limite, $pagina);
+        return $this->livros->listarComNomes($limite, $pagina);
+    }
+
+    public function opcoes(): array
+    {
+        return [$this->autores->todos(), $this->assuntos->todos()];
     }
 
     public function contar(): int

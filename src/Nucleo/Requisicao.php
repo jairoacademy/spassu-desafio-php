@@ -27,6 +27,13 @@ final readonly class Requisicao
         return is_string($valor) ? trim($valor) : '';
     }
 
+    public function lista(string $campo): array
+    {
+        $valor = $this->corpo[$campo] ?? [];
+
+        return is_array($valor) ? array_values(array_filter($valor, is_string(...))) : [];
+    }
+
     public function pagina(): int
     {
         return max(1, min((int) ($this->query['pagina'] ?? 1), 1_000_000));

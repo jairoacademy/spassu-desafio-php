@@ -30,3 +30,8 @@ body {
 .erro-pagina {
     max-width: 32rem;
 }
+
+.lista-opcoes {
+    max-height: 12rem;
+    overflow-y: auto;
+}

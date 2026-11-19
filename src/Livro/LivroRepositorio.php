@@ -10,6 +10,23 @@ final readonly class LivroRepositorio extends Repositorio
     protected const string TABELA = 'Livro';
     protected const string PK = 'CodLivro';
 
+    public function listarComNomes(int $limite = 20, int $pagina = 1): array
+    {
+        $deslocamento = ($pagina - 1) * $limite;
+
+        return $this->banco->consultar(
+            'SELECT Livro.*,'
+            . ' (SELECT GROUP_CONCAT(Autor.Nome ORDER BY Autor.Nome SEPARATOR \', \')'
+            . ' FROM Livro_Autor JOIN Autor ON Autor.CodAutor = Livro_Autor.Autor_CodAutor'
+            . ' WHERE Livro_Autor.Livro_CodLivro = Livro.CodLivro) AS Autores,'
+            . ' (SELECT GROUP_CONCAT(Assunto.Descricao ORDER BY Assunto.Descricao SEPARATOR \', \')'
+            . ' FROM Livro_Assunto JOIN Assunto ON Assunto.CodAssunto = Livro_Assunto.Assunto_CodAssunto'
+            . ' WHERE Livro_Assunto.Livro_CodLivro = Livro.CodLivro) AS Assuntos'
+            . ' FROM Livro ORDER BY Livro.CodLivro DESC'
+            . " LIMIT {$limite} OFFSET {$deslocamento}",
+        );
+    }
+
     public function criarComVinculos(array $dados, array $autores, array $assuntos): array
     {
         return $this->banco->transacao(function () use ($dados, $autores, $assuntos): array {

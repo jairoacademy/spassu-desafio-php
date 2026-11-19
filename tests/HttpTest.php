@@ -107,11 +107,13 @@ final class HttpTest extends TestCase
             'GET',
             '/',
             ['pagina' => '99999999999999999999'],
-            ['nome' => '  Fulano ', 'lista' => ['a']],
+            ['nome' => '  Fulano ', 'lista' => ['a', ['b']]],
         );
 
         self::assertSame('Fulano', $requisicao->texto('nome'));
         self::assertSame('', $requisicao->texto('lista'));
+        self::assertSame(['a'], $requisicao->lista('lista'));
+        self::assertSame([], $requisicao->lista('nome'));
         self::assertSame(1_000_000, $requisicao->pagina());
     }
 

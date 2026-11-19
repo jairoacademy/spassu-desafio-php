@@ -10,6 +10,11 @@ final readonly class AutorRepositorio extends Repositorio
     protected const string TABELA = 'Autor';
     protected const string PK = 'CodAutor';
 
+    public function todos(): array
+    {
+        return $this->banco->consultar('SELECT * FROM Autor ORDER BY Nome');
+    }
+
     public function nomeExistente(string $nome, int|string $ignorarCodigo = 0): bool
     {
         $sql = 'SELECT 1 FROM Autor WHERE Nome = ? AND CodAutor <> ? LIMIT 1';

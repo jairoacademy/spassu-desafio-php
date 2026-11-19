@@ -1,6 +1,7 @@
 <?php
 $aplicacao = 'Cadastro de Livros';
 $menu = [
+    '/livros' => 'Livros',
     '/autores' => 'Autores',
     '/assuntos' => 'Assuntos',
 ];

@@ -7,14 +7,22 @@ use App\Assunto\AssuntoServico;
 use App\Autor\AutorController;
 use App\Autor\AutorRepositorio;
 use App\Autor\AutorServico;
+use App\Livro\LivroController;
+use App\Livro\LivroRepositorio;
+use App\Livro\LivroServico;
 use App\Nucleo\Banco;
 use App\Nucleo\Resposta;
 use App\Nucleo\Sessao;
 use App\Nucleo\View;
 
 return static function (Banco $banco, View $view, Sessao $sessao): array {
-    $autores = new AutorController(new AutorServico(new AutorRepositorio($banco)), $view, $sessao);
-    $assuntos = new AssuntoController(new AssuntoServico(new AssuntoRepositorio($banco)), $view, $sessao);
+    $autorRepositorio = new AutorRepositorio($banco);
+    $assuntoRepositorio = new AssuntoRepositorio($banco);
+    $livroServico = new LivroServico(new LivroRepositorio($banco), $autorRepositorio, $assuntoRepositorio);
+
+    $autores = new AutorController(new AutorServico($autorRepositorio), $view, $sessao);
+    $assuntos = new AssuntoController(new AssuntoServico($assuntoRepositorio), $view, $sessao);
+    $livros = new LivroController($livroServico, $view, $sessao);
 
     return [
         'GET /saude' => static function () use ($banco): Resposta {
@@ -22,12 +30,21 @@ return static function (Banco $banco, View $view, Sessao $sessao): array {
 
             return Resposta::json(['status' => 'ok']);
         },
+
+        'GET /livros' => $livros->listar(...),
+        'GET /livros/novo' => $livros->novo(...),
+        'POST /livros' => $livros->criar(...),
+        'GET /livros/{id}/editar' => $livros->editar(...),
+        'POST /livros/{id}' => $livros->alterar(...),
+        'POST /livros/{id}/excluir' => $livros->excluir(...),
+
         'GET /autores' => $autores->listar(...),
         'GET /autores/novo' => $autores->novo(...),
         'POST /autores' => $autores->criar(...),
         'GET /autores/{id}/editar' => $autores->editar(...),
         'POST /autores/{id}' => $autores->alterar(...),
         'POST /autores/{id}/excluir' => $autores->excluir(...),
+
         'GET /assuntos' => $assuntos->listar(...),
         'GET /assuntos/novo' => $assuntos->novo(...),
         'POST /assuntos' => $assuntos->criar(...),
