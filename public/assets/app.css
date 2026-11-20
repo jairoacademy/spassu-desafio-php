@@ -36,6 +36,31 @@ body {
     overflow-y: auto;
 }
 
+.tabela-relatorio {
+    table-layout: fixed;
+    min-width: 45rem;
+}
+
+.tabela-relatorio .coluna-titulo {
+    width: 32%;
+}
+
+.tabela-relatorio .coluna-editora {
+    width: 18%;
+}
+
+.tabela-relatorio .coluna-numero {
+    width: 8%;
+}
+
+.tabela-relatorio .coluna-assuntos {
+    width: 20%;
+}
+
+.tabela-relatorio .coluna-valor {
+    width: 14%;
+}
+
 @media print {
     .menu-principal,
     .nao-imprimir,

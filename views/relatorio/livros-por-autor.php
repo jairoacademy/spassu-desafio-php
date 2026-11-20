@@ -27,7 +27,15 @@
     <?php foreach ($relatorio['autores'] as $autor): ?>
         <h2 class="h5"><?= $this->e($autor['nome']) ?></h2>
         <div class="card border-0 shadow-sm table-responsive mb-4">
-            <table class="table align-middle mb-0">
+            <table class="table align-middle mb-0 tabela-relatorio">
+                <colgroup>
+                    <col class="coluna-titulo">
+                    <col class="coluna-editora">
+                    <col class="coluna-numero">
+                    <col class="coluna-numero">
+                    <col class="coluna-assuntos">
+                    <col class="coluna-valor">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Título</th>
