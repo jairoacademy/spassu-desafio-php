@@ -14,6 +14,9 @@ use App\Nucleo\Banco;
 use App\Nucleo\Resposta;
 use App\Nucleo\Sessao;
 use App\Nucleo\View;
+use App\Relatorio\RelatorioController;
+use App\Relatorio\RelatorioRepositorio;
+use App\Relatorio\RelatorioServico;
 
 return static function (Banco $banco, View $view, Sessao $sessao): array {
     $autorRepositorio = new AutorRepositorio($banco);
@@ -23,6 +26,8 @@ return static function (Banco $banco, View $view, Sessao $sessao): array {
     $autores = new AutorController(new AutorServico($autorRepositorio), $view, $sessao);
     $assuntos = new AssuntoController(new AssuntoServico($assuntoRepositorio), $view, $sessao);
     $livros = new LivroController($livroServico, $view, $sessao);
+    $relatorioServico = new RelatorioServico(new RelatorioRepositorio($banco));
+    $relatorio = new RelatorioController($relatorioServico, $autorRepositorio, $view);
 
     return [
         'GET /' => static fn(): Resposta => Resposta::redirecionar('/livros'),
@@ -52,5 +57,7 @@ return static function (Banco $banco, View $view, Sessao $sessao): array {
         'GET /assuntos/{id}/editar' => $assuntos->editar(...),
         'POST /assuntos/{id}' => $assuntos->alterar(...),
         'POST /assuntos/{id}/excluir' => $assuntos->excluir(...),
+
+        'GET /relatorio' => $relatorio->livrosPorAutor(...),
     ];
 };

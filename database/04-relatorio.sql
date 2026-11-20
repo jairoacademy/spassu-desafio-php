@@ -1,4 +1,4 @@
-me suCREATE OR REPLACE VIEW vw_livros_por_autor AS
+CREATE OR REPLACE VIEW vw_livros_por_autor AS
 SELECT
     a.CodAutor,
     a.Nome AS Autor,

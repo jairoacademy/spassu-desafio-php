@@ -35,3 +35,11 @@ body {
     max-height: 12rem;
     overflow-y: auto;
 }
+
+@media print {
+    .menu-principal,
+    .nao-imprimir,
+    footer {
+        display: none !important;
+    }
+}

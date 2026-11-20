@@ -4,6 +4,7 @@ $menu = [
     '/livros' => 'Livros',
     '/autores' => 'Autores',
     '/assuntos' => 'Assuntos',
+    '/relatorio' => 'Relatório',
 ];
 ?>
 <!doctype html>
