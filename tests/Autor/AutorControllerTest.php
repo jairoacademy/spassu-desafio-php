@@ -69,9 +69,22 @@ final class AutorControllerTest extends TestCase
         self::assertStringContainsString('Autor vinculado', $this->visitar('/autores')->corpo);
     }
 
-    private function visitar(string $caminho): Resposta
+    public function testListarSegundaPagina(): void
     {
-        return $this->http->processar(new Requisicao('GET', $caminho));
+        for ($codigo = 1; $codigo <= 15; $codigo++) {
+            $this->banco->executar('INSERT INTO Autor VALUES (?, ?)', [$codigo, "Fulano {$codigo}"]);
+        }
+
+        $corpo = $this->visitar('/autores', ['pagina' => '2'])->corpo;
+
+        self::assertStringContainsString('Mostrando 11–15 de 15 autores', $corpo);
+        self::assertStringContainsString('>Fulano 5<', $corpo);
+        self::assertStringNotContainsString('>Fulano 6<', $corpo);
+    }
+
+    private function visitar(string $caminho, array $query = []): Resposta
+    {
+        return $this->http->processar(new Requisicao('GET', $caminho, $query));
     }
 
     private function enviar(string $caminho, array $dados = []): Resposta

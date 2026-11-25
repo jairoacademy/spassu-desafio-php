@@ -11,7 +11,7 @@ use App\Nucleo\View;
 
 final readonly class AssuntoController
 {
-    private const int POR_PAGINA = 20;
+    private const int POR_PAGINA = 10;
 
     public function __construct(
         private AssuntoServico $servico,
@@ -27,8 +27,13 @@ final readonly class AssuntoController
         return $this->view->pagina('assuntos/lista', [
             'titulo' => 'Assuntos',
             'assuntos' => $this->servico->listar(self::POR_PAGINA, $pagina),
-            'pagina' => $pagina,
-            'totalPaginas' => max(1, (int) ceil($this->servico->contar() / self::POR_PAGINA)),
+            'paginacao' => [
+                'rota' => '/assuntos',
+                'rotulo' => 'assuntos',
+                'pagina' => $pagina,
+                'porPagina' => self::POR_PAGINA,
+                'total' => $this->servico->contar(),
+            ],
         ]);
     }
 
