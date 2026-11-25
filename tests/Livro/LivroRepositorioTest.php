@@ -66,7 +66,7 @@ final class LivroRepositorioTest extends TestCase
         $this->livros->criarComVinculos($this->dados(), [1, 2], [1]);
 
         self::assertSame(['Primeiro Livro'], $this->titulos('lano'));
-        self::assertSame(1, $this->livros->contarComFiltro('lano'));
+        self::assertSame(1, $this->livros->contar('lano'));
     }
 
     public function testTermoSemResultado(): void
@@ -74,7 +74,7 @@ final class LivroRepositorioTest extends TestCase
         $this->livros->criarComVinculos($this->dados(), [1], [1]);
 
         self::assertSame([], $this->titulos('Beltrano'));
-        self::assertSame(0, $this->livros->contarComFiltro('%'));
+        self::assertSame(0, $this->livros->contar('%'));
     }
 
     private function titulos(string $termo): array

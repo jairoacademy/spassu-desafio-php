@@ -7,25 +7,31 @@ abstract readonly class Repositorio
 {
     protected const string TABELA = '';
     protected const string PK = 'id';
+    protected const string BUSCA = '';
 
     public function __construct(protected Banco $banco)
     {
     }
 
-    public function listar(int $limite = 20, int $pagina = 1): array
+    public function listar(int $limite = 20, int $pagina = 1, string $termo = ''): array
     {
         $deslocamento = ($pagina - 1) * $limite;
+        [$filtro, $parametros] = $this->filtro($termo);
 
         return $this->banco->consultar(
-            'SELECT * FROM ' . static::TABELA
+            'SELECT * FROM ' . static::TABELA . $filtro
             . ' ORDER BY ' . static::PK . ' DESC'
             . " LIMIT {$limite} OFFSET {$deslocamento}",
+            $parametros,
         );
     }
 
-    public function contar(): int
+    public function contar(string $termo = ''): int
     {
-        return (int) $this->banco->consultar('SELECT COUNT(*) AS total FROM ' . static::TABELA)[0]['total'];
+        [$filtro, $parametros] = $this->filtro($termo);
+        $sql = 'SELECT COUNT(*) AS total FROM ' . static::TABELA . $filtro;
+
+        return (int) $this->banco->consultar($sql, $parametros)[0]['total'];
     }
 
     public function buscar(int|string $id): ?array
@@ -63,5 +69,19 @@ abstract readonly class Repositorio
     public function excluir(int|string $id): void
     {
         $this->banco->executar('DELETE FROM ' . static::TABELA . ' WHERE ' . static::PK . ' = ?', [$id]);
+    }
+
+    protected function filtro(string $termo): array
+    {
+        if ($termo === '' || static::BUSCA === '') {
+            return ['', []];
+        }
+
+        return [' WHERE ' . static::BUSCA . ' LIKE ?', [$this->padrao($termo)]];
+    }
+
+    protected function padrao(string $termo): string
+    {
+        return '%' . addcslashes($termo, '%_\\') . '%';
     }
 }

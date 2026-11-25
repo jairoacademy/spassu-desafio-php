@@ -22,16 +22,19 @@ final readonly class AutorController
     public function listar(Requisicao $requisicao): Resposta
     {
         $pagina = $requisicao->pagina();
+        $termo = mb_substr($requisicao->parametro('q'), 0, 100);
 
         return $this->view->pagina('autores/lista', [
             'titulo' => 'Autores',
-            'autores' => $this->servico->listar(self::POR_PAGINA, $pagina),
+            'termo' => $termo,
+            'autores' => $this->servico->listar(self::POR_PAGINA, $pagina, $termo),
             'paginacao' => [
                 'rota' => '/autores',
                 'rotulo' => 'autores',
                 'pagina' => $pagina,
                 'porPagina' => self::POR_PAGINA,
-                'total' => $this->servico->contar(),
+                'total' => $this->servico->contar($termo),
+                'filtros' => ['q' => $termo],
             ],
         ]);
     }

@@ -9,6 +9,7 @@ final readonly class AutorRepositorio extends Repositorio
 {
     protected const string TABELA = 'Autor';
     protected const string PK = 'CodAutor';
+    protected const string BUSCA = 'Nome';
 
     public function todos(): array
     {

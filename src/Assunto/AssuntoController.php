@@ -23,16 +23,19 @@ final readonly class AssuntoController
     public function listar(Requisicao $requisicao): Resposta
     {
         $pagina = $requisicao->pagina();
+        $termo = mb_substr($requisicao->parametro('q'), 0, 100);
 
         return $this->view->pagina('assuntos/lista', [
             'titulo' => 'Assuntos',
-            'assuntos' => $this->servico->listar(self::POR_PAGINA, $pagina),
+            'termo' => $termo,
+            'assuntos' => $this->servico->listar(self::POR_PAGINA, $pagina, $termo),
             'paginacao' => [
                 'rota' => '/assuntos',
                 'rotulo' => 'assuntos',
                 'pagina' => $pagina,
                 'porPagina' => self::POR_PAGINA,
-                'total' => $this->servico->contar(),
+                'total' => $this->servico->contar($termo),
+                'filtros' => ['q' => $termo],
             ],
         ]);
     }

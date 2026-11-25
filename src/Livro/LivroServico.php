@@ -31,7 +31,7 @@ final readonly class LivroServico
 
     public function contar(string $termo = ''): int
     {
-        return $this->livros->contarComFiltro($termo);
+        return $this->livros->contar($termo);
     }
 
     public function buscar(int $codigo): array

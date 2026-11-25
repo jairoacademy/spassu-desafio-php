@@ -28,6 +28,7 @@ final class RepositorioTest extends TestCase
         $this->registros = new readonly class($banco) extends Repositorio {
             protected const string TABELA = 'registro';
             protected const string PK = 'codigo';
+            protected const string BUSCA = 'nome';
         };
     }
 
@@ -78,6 +79,17 @@ final class RepositorioTest extends TestCase
         self::assertSame(['Beltrano', 'Ciclano'], $this->nomesDaPagina(1));
         self::assertSame(['Fulano'], $this->nomesDaPagina(2));
         self::assertSame(3, $this->registros->contar());
+    }
+
+    public function testListarComBusca(): void
+    {
+        foreach (['Fulano', 'Ciclano', 'Beltrano', '100%'] as $nome) {
+            $this->registros->criar(['nome' => $nome]);
+        }
+
+        self::assertSame(['Ciclano', 'Fulano'], array_column($this->registros->listar(10, 1, 'lano'), 'nome'));
+        self::assertSame(2, $this->registros->contar('lano'));
+        self::assertSame(1, $this->registros->contar('%'));
     }
 
     private function nomesDaPagina(int $pagina): array

@@ -6,19 +6,11 @@
     <a class="btn btn-primary" href="/livros/novo">Novo livro</a>
 </div>
 
-<form class="row g-2 mb-3" method="get" action="/livros" role="search">
-    <div class="col">
-        <label class="visually-hidden" for="busca">Buscar livros</label>
-        <input class="form-control" type="search" id="busca" name="q" maxlength="100"
-               placeholder="Buscar por título, editora ou autor..." value="<?= $this->e($termo) ?>">
-    </div>
-    <div class="col-auto">
-        <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
-        <?php if ($termo !== ''): ?>
-            <a class="btn btn-link" href="/livros">Limpar</a>
-        <?php endif; ?>
-    </div>
-</form>
+<?= $this->parcial('busca', [
+    'rota' => '/livros',
+    'termo' => $termo,
+    'placeholder' => 'Buscar por título, editora ou autor...',
+]) ?>
 
 <?php if ($livros === [] && $termo !== ''): ?>
     <p class="text-body-secondary">Nenhum livro encontrado para "<?= $this->e($termo) ?>".</p>

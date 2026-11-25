@@ -30,13 +30,6 @@ final readonly class LivroRepositorio extends Repositorio
         );
     }
 
-    public function contarComFiltro(string $termo = ''): int
-    {
-        [$filtro, $parametros] = $this->filtro($termo);
-
-        return (int) $this->banco->consultar('SELECT COUNT(*) AS total FROM Livro' . $filtro, $parametros)[0]['total'];
-    }
-
     public function criarComVinculos(array $dados, array $autores, array $assuntos): array
     {
         return $this->banco->transacao(function () use ($dados, $autores, $assuntos): array {
@@ -74,13 +67,13 @@ final readonly class LivroRepositorio extends Repositorio
         return array_column($this->banco->consultar($sql, [$codigo]), 'codigo');
     }
 
-    private function filtro(string $termo): array
+    protected function filtro(string $termo): array
     {
         if ($termo === '') {
             return ['', []];
         }
 
-        $padrao = '%' . addcslashes($termo, '%_\\') . '%';
+        $padrao = $this->padrao($termo);
 
         return [
             ' WHERE Livro.Titulo LIKE ? OR Livro.Editora LIKE ?'

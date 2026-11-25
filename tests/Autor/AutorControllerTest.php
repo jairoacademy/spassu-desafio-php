@@ -82,6 +82,15 @@ final class AutorControllerTest extends TestCase
         self::assertStringNotContainsString('>Fulano 6<', $corpo);
     }
 
+    public function testBuscarSemResultado(): void
+    {
+        $this->enviar('/autores', ['nome' => 'Fulano']);
+
+        $corpo = $this->visitar('/autores', ['q' => 'Beltrano'])->corpo;
+
+        self::assertStringContainsString('Nenhum autor encontrado para "Beltrano".', $corpo);
+    }
+
     private function visitar(string $caminho, array $query = []): Resposta
     {
         return $this->http->processar(new Requisicao('GET', $caminho, $query));

@@ -3,7 +3,11 @@
     <a class="btn btn-primary" href="/autores/novo">Novo autor</a>
 </div>
 
-<?php if ($autores === []): ?>
+<?= $this->parcial('busca', ['rota' => '/autores', 'termo' => $termo, 'placeholder' => 'Buscar por nome...']) ?>
+
+<?php if ($autores === [] && $termo !== ''): ?>
+    <p class="text-body-secondary">Nenhum autor encontrado para "<?= $this->e($termo) ?>".</p>
+<?php elseif ($autores === []): ?>
     <p class="text-body-secondary">Nenhum autor cadastrado.</p>
 <?php else: ?>
     <div class="card border-0 shadow-sm">

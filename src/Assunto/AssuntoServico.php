@@ -13,14 +13,14 @@ final readonly class AssuntoServico
     {
     }
 
-    public function listar(int $limite = 20, int $pagina = 1): array
+    public function listar(int $limite = 20, int $pagina = 1, string $termo = ''): array
     {
-        return $this->assuntos->listar($limite, $pagina);
+        return $this->assuntos->listar($limite, $pagina, $termo);
     }
 
-    public function contar(): int
+    public function contar(string $termo = ''): int
     {
-        return $this->assuntos->contar();
+        return $this->assuntos->contar($termo);
     }
 
     public function buscar(int $codigo): array

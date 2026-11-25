@@ -3,7 +3,11 @@
     <a class="btn btn-primary" href="/assuntos/novo">Novo assunto</a>
 </div>
 
-<?php if ($assuntos === []): ?>
+<?= $this->parcial('busca', ['rota' => '/assuntos', 'termo' => $termo, 'placeholder' => 'Buscar por descrição...']) ?>
+
+<?php if ($assuntos === [] && $termo !== ''): ?>
+    <p class="text-body-secondary">Nenhum assunto encontrado para "<?= $this->e($termo) ?>".</p>
+<?php elseif ($assuntos === []): ?>
     <p class="text-body-secondary">Nenhum assunto cadastrado.</p>
 <?php else: ?>
     <div class="card border-0 shadow-sm">
