@@ -28,6 +28,16 @@ final readonly class View
         return htmlspecialchars((string) $valor, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
+    public function formatarValor(mixed $valor): string
+    {
+        return number_format((float) $valor, 2, ',', '.');
+    }
+
+    public function formatarReais(mixed $valor): string
+    {
+        return $this->e('R$ ' . $this->formatarValor($valor));
+    }
+
     public function campoToken(): string
     {
         return '<input type="hidden" name="_token" value="' . $this->e($this->sessao->token()) . '">';

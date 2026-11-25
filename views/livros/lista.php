@@ -30,7 +30,7 @@
                         <td class="text-end"><?= $this->e($livro['Edicao']) ?></td>
                         <td class="text-end"><?= $this->e($livro['AnoPublicacao']) ?></td>
                         <td class="text-end text-nowrap">
-                            R$ <?= $this->e(number_format((float) $livro['Valor'], 2, ',', '.')) ?>
+                            <?= $this->formatarReais($livro['Valor']) ?>
                         </td>
                         <td class="text-end text-nowrap">
                             <a class="btn btn-sm btn-outline-secondary"

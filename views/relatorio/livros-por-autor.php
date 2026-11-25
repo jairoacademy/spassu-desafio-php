@@ -55,7 +55,7 @@
                             <td class="text-end"><?= $this->e($livro['AnoPublicacao']) ?></td>
                             <td><?= $this->e($livro['Assuntos'] ?? '') ?></td>
                             <td class="text-end text-nowrap">
-                                R$ <?= $this->e(number_format((float) $livro['Valor'], 2, ',', '.')) ?>
+                                <?= $this->formatarReais($livro['Valor']) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -64,7 +64,7 @@
                     <tr class="fw-semibold">
                         <td colspan="5">Livros: <?= $this->e($autor['quantidade']) ?></td>
                         <td class="text-end text-nowrap">
-                            R$ <?= $this->e(number_format((float) $autor['subtotal'], 2, ',', '.')) ?>
+                            <?= $this->formatarReais($autor['subtotal']) ?>
                         </td>
                     </tr>
                 </tfoot>
@@ -74,6 +74,6 @@
 
     <div class="d-flex justify-content-between fw-bold border-top pt-3">
         <span>Total de livros: <?= $this->e($relatorio['totalLivros']) ?></span>
-        <span>Total geral: R$ <?= $this->e(number_format((float) $relatorio['totalGeral'], 2, ',', '.')) ?></span>
+        <span>Total geral: <?= $this->formatarReais($relatorio['totalGeral']) ?></span>
     </div>
 <?php endif; ?>
