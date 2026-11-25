@@ -19,9 +19,9 @@ final readonly class LivroServico
     ) {
     }
 
-    public function listar(int $limite = 20, int $pagina = 1): array
+    public function listar(int $limite = 20, int $pagina = 1, string $termo = ''): array
     {
-        return $this->livros->listarComNomes($limite, $pagina);
+        return $this->livros->listarComNomes($limite, $pagina, $termo);
     }
 
     public function opcoes(): array
@@ -29,9 +29,9 @@ final readonly class LivroServico
         return [$this->autores->todos(), $this->assuntos->todos()];
     }
 
-    public function contar(): int
+    public function contar(string $termo = ''): int
     {
-        return $this->livros->contar();
+        return $this->livros->contarComFiltro($termo);
     }
 
     public function buscar(int $codigo): array

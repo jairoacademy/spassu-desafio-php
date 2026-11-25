@@ -23,7 +23,8 @@ foreach ($vizinhas as $numero) {
 }
 
 $anterior = max(1, min($pagina - 1, $totalPaginas));
-$link = static fn(int $numero): string => "{$rota}?pagina={$numero}";
+$filtros = array_filter($filtros ?? [], static fn(string $valor): bool => $valor !== '');
+$link = static fn(int $numero): string => $rota . '?' . http_build_query([...$filtros, 'pagina' => $numero]);
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
     <span class="small text-body-secondary">

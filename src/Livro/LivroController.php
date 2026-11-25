@@ -23,16 +23,19 @@ final readonly class LivroController
     public function listar(Requisicao $requisicao): Resposta
     {
         $pagina = $requisicao->pagina();
+        $termo = mb_substr($requisicao->parametro('q'), 0, 100);
 
         return $this->view->pagina('livros/lista', [
             'titulo' => 'Livros',
-            'livros' => $this->servico->listar(self::POR_PAGINA, $pagina),
+            'termo' => $termo,
+            'livros' => $this->servico->listar(self::POR_PAGINA, $pagina, $termo),
             'paginacao' => [
                 'rota' => '/livros',
                 'rotulo' => 'livros',
                 'pagina' => $pagina,
                 'porPagina' => self::POR_PAGINA,
-                'total' => $this->servico->contar(),
+                'total' => $this->servico->contar($termo),
+                'filtros' => ['q' => $termo],
             ],
         ]);
     }

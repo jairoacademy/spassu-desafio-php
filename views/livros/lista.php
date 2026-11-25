@@ -1,9 +1,28 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Livros</h1>
+    <div>
+        <h1 class="h3 mb-0">Livros</h1>
+        <p class="text-body-secondary mb-0">Catálogo completo com autores, assuntos e valores.</p>
+    </div>
     <a class="btn btn-primary" href="/livros/novo">Novo livro</a>
 </div>
 
-<?php if ($livros === []): ?>
+<form class="row g-2 mb-3" method="get" action="/livros" role="search">
+    <div class="col">
+        <label class="visually-hidden" for="busca">Buscar livros</label>
+        <input class="form-control" type="search" id="busca" name="q" maxlength="100"
+               placeholder="Buscar por título, editora ou autor..." value="<?= $this->e($termo) ?>">
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        <?php if ($termo !== ''): ?>
+            <a class="btn btn-link" href="/livros">Limpar</a>
+        <?php endif; ?>
+    </div>
+</form>
+
+<?php if ($livros === [] && $termo !== ''): ?>
+    <p class="text-body-secondary">Nenhum livro encontrado para "<?= $this->e($termo) ?>".</p>
+<?php elseif ($livros === []): ?>
     <p class="text-body-secondary">Nenhum livro cadastrado.</p>
 <?php else: ?>
     <div class="card border-0 shadow-sm">

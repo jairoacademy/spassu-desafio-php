@@ -10,9 +10,10 @@ final readonly class LivroRepositorio extends Repositorio
     protected const string TABELA = 'Livro';
     protected const string PK = 'CodLivro';
 
-    public function listarComNomes(int $limite = 20, int $pagina = 1): array
+    public function listarComNomes(int $limite = 20, int $pagina = 1, string $termo = ''): array
     {
         $deslocamento = ($pagina - 1) * $limite;
+        [$filtro, $parametros] = $this->filtro($termo);
 
         return $this->banco->consultar(
             'SELECT Livro.*,'
@@ -22,9 +23,18 @@ final readonly class LivroRepositorio extends Repositorio
             . ' (SELECT GROUP_CONCAT(Assunto.Descricao ORDER BY Assunto.Descricao SEPARATOR \', \')'
             . ' FROM Livro_Assunto JOIN Assunto ON Assunto.CodAssunto = Livro_Assunto.Assunto_CodAssunto'
             . ' WHERE Livro_Assunto.Livro_CodLivro = Livro.CodLivro) AS Assuntos'
-            . ' FROM Livro ORDER BY Livro.CodLivro DESC'
+            . ' FROM Livro' . $filtro
+            . ' ORDER BY Livro.CodLivro DESC'
             . " LIMIT {$limite} OFFSET {$deslocamento}",
+            $parametros,
         );
+    }
+
+    public function contarComFiltro(string $termo = ''): int
+    {
+        [$filtro, $parametros] = $this->filtro($termo);
+
+        return (int) $this->banco->consultar('SELECT COUNT(*) AS total FROM Livro' . $filtro, $parametros)[0]['total'];
     }
 
     public function criarComVinculos(array $dados, array $autores, array $assuntos): array
@@ -62,6 +72,23 @@ final readonly class LivroRepositorio extends Repositorio
             . ' WHERE Livro_CodLivro = ? ORDER BY Assunto_CodAssunto';
 
         return array_column($this->banco->consultar($sql, [$codigo]), 'codigo');
+    }
+
+    private function filtro(string $termo): array
+    {
+        if ($termo === '') {
+            return ['', []];
+        }
+
+        $padrao = '%' . addcslashes($termo, '%_\\') . '%';
+
+        return [
+            ' WHERE Livro.Titulo LIKE ? OR Livro.Editora LIKE ?'
+            . ' OR EXISTS (SELECT 1 FROM Livro_Autor'
+            . ' JOIN Autor ON Autor.CodAutor = Livro_Autor.Autor_CodAutor'
+            . ' WHERE Livro_Autor.Livro_CodLivro = Livro.CodLivro AND Autor.Nome LIKE ?)',
+            [$padrao, $padrao, $padrao],
+        ];
     }
 
     private function vincular(int $codigo, array $autores, array $assuntos): void

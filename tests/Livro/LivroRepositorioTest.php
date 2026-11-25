@@ -51,7 +51,38 @@ final class LivroRepositorioTest extends TestCase
         self::assertSame(0, $this->livros->contar());
     }
 
-    private function dados(): array
+    public function testBuscarPorTituloOuEditora(): void
+    {
+        $this->livros->criarComVinculos($this->dados(), [1], [1]);
+        $segundo = $this->dados(['Titulo' => 'Segundo Livro', 'Editora' => 'Outra Editora']);
+        $this->livros->criarComVinculos($segundo, [1], [1]);
+
+        self::assertSame(['Segundo Livro'], $this->titulos('segundo'));
+        self::assertSame(['Segundo Livro'], $this->titulos('outra'));
+    }
+
+    public function testBuscarPorAutorSemDuplicar(): void
+    {
+        $this->livros->criarComVinculos($this->dados(), [1, 2], [1]);
+
+        self::assertSame(['Primeiro Livro'], $this->titulos('lano'));
+        self::assertSame(1, $this->livros->contarComFiltro('lano'));
+    }
+
+    public function testTermoSemResultado(): void
+    {
+        $this->livros->criarComVinculos($this->dados(), [1], [1]);
+
+        self::assertSame([], $this->titulos('Beltrano'));
+        self::assertSame(0, $this->livros->contarComFiltro('%'));
+    }
+
+    private function titulos(string $termo): array
+    {
+        return array_column($this->livros->listarComNomes(10, 1, $termo), 'Titulo');
+    }
+
+    private function dados(array $alteracoes = []): array
     {
         return [
             'Titulo' => 'Primeiro Livro',
@@ -59,6 +90,7 @@ final class LivroRepositorioTest extends TestCase
             'Edicao' => 1,
             'AnoPublicacao' => '2026',
             'Valor' => '39.90',
+            ...$alteracoes,
         ];
     }
 }
