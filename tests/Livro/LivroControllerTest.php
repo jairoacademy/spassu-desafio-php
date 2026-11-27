@@ -44,6 +44,7 @@ final class LivroControllerTest extends TestCase
         $lista = $this->visitar('/livros')->corpo;
 
         self::assertStringContainsString('Primeiro Livro', $lista);
+        self::assertStringContainsString('9788535902771', $lista);
         self::assertStringContainsString('Ciclano, Fulano', $lista);
         self::assertStringContainsString('R$ 1.234,50', $lista);
     }
@@ -83,7 +84,11 @@ final class LivroControllerTest extends TestCase
     public function testBuscarMantemTermoNaPaginacao(): void
     {
         for ($numero = 1; $numero <= 11; $numero++) {
-            $this->enviar('/livros', [...$this->dados(), 'titulo' => "Primeiro Livro {$numero}"]);
+            $this->enviar('/livros', [
+                ...$this->dados(),
+                'titulo' => "Primeiro Livro {$numero}",
+                'isbn' => sprintf('97885359027%02d', $numero),
+            ]);
         }
 
         $corpo = $this->visitar('/livros', ['q' => 'Primeiro'])->corpo;
@@ -104,6 +109,7 @@ final class LivroControllerTest extends TestCase
     {
         return [
             'titulo' => 'Primeiro Livro',
+            'isbn' => '978-85-359-0277-1',
             'editora' => 'Editora Teste',
             'edicao' => '1',
             'ano' => '2026',

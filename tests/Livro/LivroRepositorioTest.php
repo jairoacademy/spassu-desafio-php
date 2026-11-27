@@ -54,11 +54,22 @@ final class LivroRepositorioTest extends TestCase
     public function testBuscarPorTituloOuEditora(): void
     {
         $this->livros->criarComVinculos($this->dados(), [1], [1]);
-        $segundo = $this->dados(['Titulo' => 'Segundo Livro', 'Editora' => 'Outra Editora']);
+        $segundo = $this->dados([
+            'Titulo' => 'Segundo Livro',
+            'ISBN' => '9788535902772',
+            'Editora' => 'Outra Editora',
+        ]);
         $this->livros->criarComVinculos($segundo, [1], [1]);
 
         self::assertSame(['Segundo Livro'], $this->titulos('segundo'));
         self::assertSame(['Segundo Livro'], $this->titulos('outra'));
+    }
+
+    public function testBuscarPorIsbn(): void
+    {
+        $this->livros->criarComVinculos($this->dados(), [1], [1]);
+
+        self::assertSame(['Primeiro Livro'], $this->titulos('978-85-359'));
     }
 
     public function testBuscarPorAutorSemDuplicar(): void
@@ -86,6 +97,7 @@ final class LivroRepositorioTest extends TestCase
     {
         return [
             'Titulo' => 'Primeiro Livro',
+            'ISBN' => '9788535902771',
             'Editora' => 'Editora Teste',
             'Edicao' => 1,
             'AnoPublicacao' => '2026',

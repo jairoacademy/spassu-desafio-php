@@ -44,6 +44,7 @@ final readonly class LivroController
     {
         return $this->formulario('Novo livro', '/livros', [
             'titulo' => '',
+            'isbn' => '',
             'editora' => '',
             'edicao' => '',
             'ano' => '',
@@ -59,6 +60,7 @@ final readonly class LivroController
 
         return $this->formulario('Editar livro', "/livros/{$id}", [
             'titulo' => $livro['Titulo'],
+            'isbn' => $livro['ISBN'],
             'editora' => $livro['Editora'],
             'edicao' => (string) $livro['Edicao'],
             'ano' => $livro['AnoPublicacao'],
@@ -110,6 +112,7 @@ final readonly class LivroController
     {
         return [
             'titulo' => $requisicao->texto('titulo'),
+            'isbn' => $requisicao->texto('isbn'),
             'editora' => $requisicao->texto('editora'),
             'edicao' => $requisicao->texto('edicao'),
             'ano' => $requisicao->texto('ano'),

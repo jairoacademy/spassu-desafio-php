@@ -58,8 +58,8 @@ final class EsquemaTest extends TestCase
     private function criarLivro(): int
     {
         $this->banco->executar(
-            'INSERT INTO Livro (Titulo, Editora, Edicao, AnoPublicacao) VALUES (?, ?, ?, ?)',
-            ['Livro do Fulano', 'Editora', 1, '2026'],
+            'INSERT INTO Livro (Titulo, ISBN, Editora, Edicao, AnoPublicacao) VALUES (?, ?, ?, ?, ?)',
+            ['Livro do Fulano', '9788535902778', 'Editora', 1, '2026'],
         );
 
         return (int) $this->banco->ultimoId();

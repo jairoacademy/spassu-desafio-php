@@ -61,7 +61,7 @@ final class AutorControllerTest extends TestCase
     public function testExcluirVinculadoMostraAviso(): void
     {
         $this->enviar('/autores', ['nome' => 'Fulano']);
-        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
+        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', '9788535902778', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Autor VALUES (1, 1)');
         $this->sessao->consumirAviso();
 

@@ -42,11 +42,15 @@ body {
 }
 
 .tabela-relatorio .coluna-titulo {
-    width: 32%;
+    width: 26%;
+}
+
+.tabela-relatorio .coluna-isbn {
+    width: 14%;
 }
 
 .tabela-relatorio .coluna-editora {
-    width: 18%;
+    width: 14%;
 }
 
 .tabela-relatorio .coluna-numero {
@@ -54,7 +58,7 @@ body {
 }
 
 .tabela-relatorio .coluna-assuntos {
-    width: 20%;
+    width: 16%;
 }
 
 .tabela-relatorio .coluna-valor {

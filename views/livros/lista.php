@@ -9,7 +9,7 @@
 <?= $this->parcial('busca', [
     'rota' => '/livros',
     'termo' => $termo,
-    'placeholder' => 'Buscar por título, editora ou autor...',
+    'placeholder' => 'Buscar por título, ISBN, editora ou autor...',
 ]) ?>
 
 <?php if ($livros === [] && $termo !== ''): ?>
@@ -23,6 +23,7 @@
                 <thead>
                     <tr>
                         <th>Título</th>
+                        <th>ISBN</th>
                         <th>Autores</th>
                         <th>Assuntos</th>
                         <th>Editora</th>
@@ -36,6 +37,7 @@
                     <?php foreach ($livros as $livro): ?>
                         <tr>
                             <td><?= $this->e($livro['Titulo']) ?></td>
+                            <td class="text-nowrap"><?= $this->e($livro['ISBN']) ?></td>
                             <td><?= $this->e($livro['Autores']) ?></td>
                             <td><?= $this->e($livro['Assuntos']) ?></td>
                             <td><?= $this->e($livro['Editora']) ?></td>

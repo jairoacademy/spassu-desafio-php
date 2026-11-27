@@ -4,6 +4,7 @@ SELECT
     a.Nome AS Autor,
     l.CodLivro,
     l.Titulo,
+    l.ISBN,
     l.Editora,
     l.Edicao,
     l.AnoPublicacao,

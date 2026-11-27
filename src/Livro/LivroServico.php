@@ -56,7 +56,7 @@ final readonly class LivroServico
     public function alterar(int $codigo, array $dados): array
     {
         $this->buscar($codigo);
-        [$livro, $autores, $assuntos] = $this->validar($dados);
+        [$livro, $autores, $assuntos] = $this->validar($dados, $codigo);
         $this->livros->alterarComVinculos($codigo, $livro, $autores, $assuntos);
 
         return $this->buscar($codigo);
@@ -68,9 +68,10 @@ final readonly class LivroServico
         $this->livros->excluir($codigo);
     }
 
-    private function validar(array $dados): array
+    private function validar(array $dados, int $codigo = 0): array
     {
         $titulo = $this->texto($dados['titulo'] ?? '');
+        $isbn = strtoupper(str_replace(['-', ' '], '', $this->texto($dados['isbn'] ?? '')));
         $editora = $this->texto($dados['editora'] ?? '');
         $edicao = $this->texto($dados['edicao'] ?? '');
         $ano = $this->texto($dados['ano'] ?? '');
@@ -80,6 +81,7 @@ final readonly class LivroServico
 
         $erros = array_filter([
             'titulo' => $this->erroTexto($titulo, 'o título'),
+            'isbn' => $this->erroIsbn($isbn, $codigo),
             'editora' => $this->erroTexto($editora, 'a editora'),
             'edicao' => preg_match('/^[1-9]\d{0,3}$/', $edicao) ? null : 'Informe uma edição entre 1 e 9999.',
             'ano' => $this->erroAno($ano),
@@ -94,6 +96,7 @@ final readonly class LivroServico
 
         $livro = [
             'Titulo' => $titulo,
+            'ISBN' => $isbn,
             'Editora' => $editora,
             'Edicao' => (int) $edicao,
             'AnoPublicacao' => $ano,
@@ -135,6 +138,15 @@ final readonly class LivroServico
         return match (true) {
             $texto === '' => "Informe {$campo}.",
             mb_strlen($texto) > self::TAMANHO_TEXTO => 'Use no máximo 40 caracteres.',
+            default => null,
+        };
+    }
+
+    private function erroIsbn(string $isbn, int $codigo): ?string
+    {
+        return match (true) {
+            !preg_match('/^(\d{9}[\dX]|\d{13})$/', $isbn) => 'Informe um ISBN com 10 ou 13 dígitos.',
+            $this->livros->isbnExistente($isbn, $codigo) => 'Já existe um livro com esse ISBN.',
             default => null,
         };
     }

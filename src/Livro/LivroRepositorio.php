@@ -52,6 +52,13 @@ final readonly class LivroRepositorio extends Repositorio
         });
     }
 
+    public function isbnExistente(string $isbn, int $ignorarCodigo = 0): bool
+    {
+        $sql = 'SELECT 1 FROM Livro WHERE ISBN = ? AND CodLivro <> ? LIMIT 1';
+
+        return $this->banco->consultar($sql, [$isbn, $ignorarCodigo]) !== [];
+    }
+
     public function autores(int $codigo): array
     {
         $sql = 'SELECT Autor_CodAutor AS codigo FROM Livro_Autor WHERE Livro_CodLivro = ? ORDER BY Autor_CodAutor';
@@ -74,13 +81,14 @@ final readonly class LivroRepositorio extends Repositorio
         }
 
         $padrao = $this->padrao($termo);
+        $isbn = $this->padrao(str_replace(['-', ' '], '', $termo));
 
         return [
-            ' WHERE Livro.Titulo LIKE ? OR Livro.Editora LIKE ?'
+            ' WHERE Livro.Titulo LIKE ? OR Livro.ISBN LIKE ? OR Livro.Editora LIKE ?'
             . ' OR EXISTS (SELECT 1 FROM Livro_Autor'
             . ' JOIN Autor ON Autor.CodAutor = Livro_Autor.Autor_CodAutor'
             . ' WHERE Livro_Autor.Livro_CodLivro = Livro.CodLivro AND Autor.Nome LIKE ?)',
-            [$padrao, $padrao, $padrao],
+            [$padrao, $isbn, $padrao, $padrao],
         ];
     }
 

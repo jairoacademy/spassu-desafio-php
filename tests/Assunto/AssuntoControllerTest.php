@@ -61,7 +61,7 @@ final class AssuntoControllerTest extends TestCase
     public function testExcluirVinculadoMostraAviso(): void
     {
         $this->enviar('/assuntos', ['descricao' => 'Romance']);
-        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
+        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', '9788535902778', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
         $this->sessao->consumirAviso();
 
