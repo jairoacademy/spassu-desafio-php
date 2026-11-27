@@ -40,7 +40,7 @@
                             <td class="text-nowrap"><?= $this->e($livro['ISBN']) ?></td>
                             <td><?= $this->e($livro['Autores']) ?></td>
                             <td><?= $this->e($livro['Assuntos']) ?></td>
-                            <td><?= $this->e($livro['Editora']) ?></td>
+                            <td class="text-nowrap"><?= $this->e($livro['Editora']) ?></td>
                             <td class="text-end"><?= $this->e($livro['Edicao']) ?></td>
                             <td class="text-end"><?= $this->e($livro['AnoPublicacao']) ?></td>
                             <td class="text-end text-nowrap">
