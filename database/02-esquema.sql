@@ -1,11 +1,13 @@
 CREATE TABLE IF NOT EXISTS Livro (
     CodLivro INT NOT NULL AUTO_INCREMENT,
     Titulo VARCHAR(40) NOT NULL,
+    ISBN VARCHAR(13) NOT NULL,
     Editora VARCHAR(40) NOT NULL,
     Edicao INT NOT NULL,
     AnoPublicacao VARCHAR(4) NOT NULL,
     Valor DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     PRIMARY KEY (CodLivro),
+    UNIQUE INDEX idx_livro_isbn (ISBN),
     INDEX idx_livro_titulo (Titulo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

@@ -61,7 +61,7 @@ final class AutorControllerTest extends TestCase
     public function testExcluirVinculadoMostraAviso(): void
     {
         $this->enviar('/autores', ['nome' => 'Fulano']);
-        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
+        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', '9788535902778', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Autor VALUES (1, 1)');
         $this->sessao->consumirAviso();
 
@@ -69,9 +69,31 @@ final class AutorControllerTest extends TestCase
         self::assertStringContainsString('Autor vinculado', $this->visitar('/autores')->corpo);
     }
 
-    private function visitar(string $caminho): Resposta
+    public function testListarSegundaPagina(): void
     {
-        return $this->http->processar(new Requisicao('GET', $caminho));
+        for ($codigo = 1; $codigo <= 15; $codigo++) {
+            $this->banco->executar('INSERT INTO Autor VALUES (?, ?)', [$codigo, "Fulano {$codigo}"]);
+        }
+
+        $corpo = $this->visitar('/autores', ['pagina' => '2'])->corpo;
+
+        self::assertStringContainsString('Mostrando 11–15 de 15 autores', $corpo);
+        self::assertStringContainsString('>Fulano 5<', $corpo);
+        self::assertStringNotContainsString('>Fulano 6<', $corpo);
+    }
+
+    public function testBuscarSemResultado(): void
+    {
+        $this->enviar('/autores', ['nome' => 'Fulano']);
+
+        $corpo = $this->visitar('/autores', ['q' => 'Beltrano'])->corpo;
+
+        self::assertStringContainsString('Nenhum autor encontrado para "Beltrano".', $corpo);
+    }
+
+    private function visitar(string $caminho, array $query = []): Resposta
+    {
+        return $this->http->processar(new Requisicao('GET', $caminho, $query));
     }
 
     private function enviar(string $caminho, array $dados = []): Resposta

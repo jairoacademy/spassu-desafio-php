@@ -61,7 +61,7 @@ final class AssuntoControllerTest extends TestCase
     public function testExcluirVinculadoMostraAviso(): void
     {
         $this->enviar('/assuntos', ['descricao' => 'Romance']);
-        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
+        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', '9788535902778', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
         $this->sessao->consumirAviso();
 
@@ -69,9 +69,21 @@ final class AssuntoControllerTest extends TestCase
         self::assertStringContainsString('Assunto vinculado', $this->visitar('/assuntos')->corpo);
     }
 
-    private function visitar(string $caminho): Resposta
+    public function testBuscarPorDescricao(): void
     {
-        return $this->http->processar(new Requisicao('GET', $caminho));
+        $this->enviar('/assuntos', ['descricao' => 'Romance']);
+        $this->enviar('/assuntos', ['descricao' => 'Poesia']);
+
+        $corpo = $this->visitar('/assuntos', ['q' => 'poe'])->corpo;
+
+        self::assertStringContainsString('>Poesia<', $corpo);
+        self::assertStringNotContainsString('>Romance<', $corpo);
+        self::assertStringContainsString('value="poe"', $corpo);
+    }
+
+    private function visitar(string $caminho, array $query = []): Resposta
+    {
+        return $this->http->processar(new Requisicao('GET', $caminho, $query));
     }
 
     private function enviar(string $caminho, array $dados = []): Resposta

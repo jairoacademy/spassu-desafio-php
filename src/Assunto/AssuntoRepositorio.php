@@ -9,6 +9,7 @@ final readonly class AssuntoRepositorio extends Repositorio
 {
     protected const string TABELA = 'Assunto';
     protected const string PK = 'CodAssunto';
+    protected const string BUSCA = 'Descricao';
 
     public function todos(): array
     {

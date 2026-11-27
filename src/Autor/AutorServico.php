@@ -13,14 +13,14 @@ final readonly class AutorServico
     {
     }
 
-    public function listar(int $limite = 20, int $pagina = 1): array
+    public function listar(int $limite = 20, int $pagina = 1, string $termo = ''): array
     {
-        return $this->autores->listar($limite, $pagina);
+        return $this->autores->listar($limite, $pagina, $termo);
     }
 
-    public function contar(): int
+    public function contar(string $termo = ''): int
     {
-        return $this->autores->contar();
+        return $this->autores->contar($termo);
     }
 
     public function buscar(int $codigo): array

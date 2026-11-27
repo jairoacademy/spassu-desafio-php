@@ -46,7 +46,7 @@ final class AssuntoServicoTest extends TestCase
     public function testExcluirVinculadoRetorna409(): void
     {
         $this->servico->criar('Romance');
-        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', 'Editora', 1, '2026', 0)");
+        $this->banco->executar("INSERT INTO Livro VALUES (1, 'Livro', '9788535902778', 'Editora', 1, '2026', 0)");
         $this->banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1)');
 
         self::assertSame(409, $this->capturarErro(fn() => $this->servico->excluir(1))->status);

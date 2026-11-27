@@ -19,8 +19,8 @@ final class RelatorioControllerTest extends TestCase
         $banco->executar("INSERT INTO Autor VALUES (1, 'Fulano'), (2, 'Ciclano')");
         $banco->executar("INSERT INTO Assunto VALUES (1, 'Romance')");
         $banco->executar(
-            "INSERT INTO Livro VALUES (1, 'Primeiro Livro', 'Editora Teste', 1, '2026', 10.00),"
-            . " (2, 'Segundo Livro', 'Editora Teste', 1, '2026', 20.00)",
+            "INSERT INTO Livro VALUES (1, 'Primeiro Livro', '9788535902771', 'Editora Teste', 1, '2026', 10.00),"
+            . " (2, 'Segundo Livro', '9788535902772', 'Editora Teste', 1, '2026', 20.00)",
         );
         $banco->executar('INSERT INTO Livro_Autor VALUES (1, 1), (2, 2)');
         $banco->executar('INSERT INTO Livro_Assunto VALUES (1, 1), (2, 1)');
@@ -33,6 +33,7 @@ final class RelatorioControllerTest extends TestCase
         $corpo = $http->processar(new Requisicao('GET', '/relatorio', ['autor' => '1']))->corpo;
 
         self::assertStringContainsString('Primeiro Livro', $corpo);
+        self::assertStringContainsString('9788535902771', $corpo);
         self::assertStringNotContainsString('Segundo Livro', $corpo);
     }
 }

@@ -43,6 +43,11 @@ final readonly class View
         return '<input type="hidden" name="_token" value="' . $this->e($this->sessao->token()) . '">';
     }
 
+    public function parcial(string $template, array $dados = []): string
+    {
+        return $this->renderizar($template, $dados);
+    }
+
     private function renderizar(string $template, array $dados): string
     {
         extract($dados, EXTR_SKIP);

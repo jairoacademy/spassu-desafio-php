@@ -3,48 +3,45 @@
     <a class="btn btn-primary" href="/autores/novo">Novo autor</a>
 </div>
 
-<?php if ($autores === []): ?>
+<?= $this->parcial('busca', ['rota' => '/autores', 'termo' => $termo, 'placeholder' => 'Buscar por nome...']) ?>
+
+<?php if ($autores === [] && $termo !== ''): ?>
+    <p class="text-body-secondary">Nenhum autor encontrado para "<?= $this->e($termo) ?>".</p>
+<?php elseif ($autores === []): ?>
     <p class="text-body-secondary">Nenhum autor cadastrado.</p>
 <?php else: ?>
     <div class="card border-0 shadow-sm">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th class="text-end">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($autores as $autor): ?>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <td><?= $this->e($autor['CodAutor']) ?></td>
-                        <td><?= $this->e($autor['Nome']) ?></td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary"
-                               href="/autores/<?= $this->e($autor['CodAutor']) ?>/editar">Editar</a>
-                            <form class="d-inline" method="post"
-                                  action="/autores/<?= $this->e($autor['CodAutor']) ?>/excluir"
-                                  data-confirmar="Excluir este autor?">
-                                <?= $this->campoToken() ?>
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
-                            </form>
-                        </td>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th class="text-end">Ações</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($autores as $autor): ?>
+                        <tr>
+                            <td><?= $this->e($autor['CodAutor']) ?></td>
+                            <td><?= $this->e($autor['Nome']) ?></td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   href="/autores/<?= $this->e($autor['CodAutor']) ?>/editar">Editar</a>
+                                <form class="d-inline" method="post"
+                                      action="/autores/<?= $this->e($autor['CodAutor']) ?>/excluir"
+                                      data-confirmar="Excluir este autor?">
+                                    <?= $this->campoToken() ?>
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer rodape-paginacao">
+            <?= $this->parcial('paginacao', $paginacao) ?>
+        </div>
     </div>
-<?php endif; ?>
-
-<?php if ($totalPaginas > 1): ?>
-    <nav class="mt-3" aria-label="Paginação">
-        <ul class="pagination">
-            <?php for ($numero = 1; $numero <= $totalPaginas; $numero++): ?>
-                <li class="page-item<?= $numero === $pagina ? ' active' : '' ?>">
-                    <a class="page-link" href="/autores?pagina=<?= $numero ?>"><?= $numero ?></a>
-                </li>
-            <?php endfor; ?>
-        </ul>
-    </nav>
 <?php endif; ?>

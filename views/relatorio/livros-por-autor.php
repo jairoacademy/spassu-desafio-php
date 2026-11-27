@@ -30,6 +30,7 @@
             <table class="table align-middle mb-0 tabela-relatorio">
                 <colgroup>
                     <col class="coluna-titulo">
+                    <col class="coluna-isbn">
                     <col class="coluna-editora">
                     <col class="coluna-numero">
                     <col class="coluna-numero">
@@ -39,6 +40,7 @@
                 <thead>
                     <tr>
                         <th>Título</th>
+                        <th>ISBN</th>
                         <th>Editora</th>
                         <th class="text-end">Edição</th>
                         <th class="text-end">Ano</th>
@@ -50,6 +52,7 @@
                     <?php foreach ($autor['livros'] as $livro): ?>
                         <tr>
                             <td><?= $this->e($livro['Titulo']) ?></td>
+                            <td class="text-nowrap"><?= $this->e($livro['ISBN']) ?></td>
                             <td><?= $this->e($livro['Editora']) ?></td>
                             <td class="text-end"><?= $this->e($livro['Edicao']) ?></td>
                             <td class="text-end"><?= $this->e($livro['AnoPublicacao']) ?></td>
@@ -62,7 +65,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="fw-semibold">
-                        <td colspan="5">Livros: <?= $this->e($autor['quantidade']) ?></td>
+                        <td colspan="6">Livros: <?= $this->e($autor['quantidade']) ?></td>
                         <td class="text-end text-nowrap">
                             <?= $this->formatarReais($autor['subtotal']) ?>
                         </td>

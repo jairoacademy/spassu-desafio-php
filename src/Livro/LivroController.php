@@ -11,7 +11,7 @@ use App\Nucleo\View;
 
 final readonly class LivroController
 {
-    private const int POR_PAGINA = 20;
+    private const int POR_PAGINA = 10;
 
     public function __construct(
         private LivroServico $servico,
@@ -23,12 +23,20 @@ final readonly class LivroController
     public function listar(Requisicao $requisicao): Resposta
     {
         $pagina = $requisicao->pagina();
+        $termo = mb_substr($requisicao->parametro('q'), 0, 100);
 
         return $this->view->pagina('livros/lista', [
             'titulo' => 'Livros',
-            'livros' => $this->servico->listar(self::POR_PAGINA, $pagina),
-            'pagina' => $pagina,
-            'totalPaginas' => max(1, (int) ceil($this->servico->contar() / self::POR_PAGINA)),
+            'termo' => $termo,
+            'livros' => $this->servico->listar(self::POR_PAGINA, $pagina, $termo),
+            'paginacao' => [
+                'rota' => '/livros',
+                'rotulo' => 'livros',
+                'pagina' => $pagina,
+                'porPagina' => self::POR_PAGINA,
+                'total' => $this->servico->contar($termo),
+                'filtros' => ['q' => $termo],
+            ],
         ]);
     }
 
@@ -36,6 +44,7 @@ final readonly class LivroController
     {
         return $this->formulario('Novo livro', '/livros', [
             'titulo' => '',
+            'isbn' => '',
             'editora' => '',
             'edicao' => '',
             'ano' => '',
@@ -51,6 +60,7 @@ final readonly class LivroController
 
         return $this->formulario('Editar livro', "/livros/{$id}", [
             'titulo' => $livro['Titulo'],
+            'isbn' => $livro['ISBN'],
             'editora' => $livro['Editora'],
             'edicao' => (string) $livro['Edicao'],
             'ano' => $livro['AnoPublicacao'],
@@ -102,6 +112,7 @@ final readonly class LivroController
     {
         return [
             'titulo' => $requisicao->texto('titulo'),
+            'isbn' => $requisicao->texto('isbn'),
             'editora' => $requisicao->texto('editora'),
             'edicao' => $requisicao->texto('edicao'),
             'ano' => $requisicao->texto('ano'),

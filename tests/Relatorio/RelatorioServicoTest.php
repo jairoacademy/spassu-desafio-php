@@ -49,8 +49,8 @@ final class RelatorioServicoTest extends TestCase
     private function criarLivro(int $codigo, string $titulo, string $valor, array $autores, array $assuntos): void
     {
         $this->banco->executar(
-            "INSERT INTO Livro VALUES (?, ?, 'Editora Teste', 1, '2026', ?)",
-            [$codigo, $titulo, $valor],
+            "INSERT INTO Livro VALUES (?, ?, ?, 'Editora Teste', 1, '2026', ?)",
+            [$codigo, $titulo, '978853590277' . $codigo, $valor],
         );
 
         foreach ($autores as $autor) {

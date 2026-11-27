@@ -44,6 +44,7 @@ final class LivroControllerTest extends TestCase
         $lista = $this->visitar('/livros')->corpo;
 
         self::assertStringContainsString('Primeiro Livro', $lista);
+        self::assertStringContainsString('9788535902771', $lista);
         self::assertStringContainsString('Ciclano, Fulano', $lista);
         self::assertStringContainsString('R$ 1.234,50', $lista);
     }
@@ -80,10 +81,35 @@ final class LivroControllerTest extends TestCase
         self::assertStringContainsString('Nenhum livro cadastrado.', $this->visitar('/livros')->corpo);
     }
 
+    public function testBuscarMantemTermoNaPaginacao(): void
+    {
+        for ($numero = 1; $numero <= 11; $numero++) {
+            $this->enviar('/livros', [
+                ...$this->dados(),
+                'titulo' => "Primeiro Livro {$numero}",
+                'isbn' => sprintf('97885359027%02d', $numero),
+            ]);
+        }
+
+        $corpo = $this->visitar('/livros', ['q' => 'Primeiro'])->corpo;
+
+        self::assertStringContainsString('value="Primeiro"', $corpo);
+        self::assertStringContainsString('href="/livros?q=Primeiro&amp;pagina=2"', $corpo);
+    }
+
+    public function testBuscarSemResultadoEscapaTermo(): void
+    {
+        $corpo = $this->visitar('/livros', ['q' => '<b>'])->corpo;
+
+        self::assertStringContainsString('Nenhum livro encontrado para "&lt;b&gt;".', $corpo);
+        self::assertStringNotContainsString('<b>', $corpo);
+    }
+
     private function dados(): array
     {
         return [
             'titulo' => 'Primeiro Livro',
+            'isbn' => '978-85-359-0277-1',
             'editora' => 'Editora Teste',
             'edicao' => '1',
             'ano' => '2026',
@@ -93,9 +119,9 @@ final class LivroControllerTest extends TestCase
         ];
     }
 
-    private function visitar(string $caminho): Resposta
+    private function visitar(string $caminho, array $query = []): Resposta
     {
-        return $this->http->processar(new Requisicao('GET', $caminho));
+        return $this->http->processar(new Requisicao('GET', $caminho, $query));
     }
 
     private function enviar(string $caminho, array $dados = []): Resposta

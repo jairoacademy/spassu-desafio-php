@@ -10,7 +10,7 @@ use App\Nucleo\Sessao;
 use App\Nucleo\View;
 final readonly class AutorController
 {
-    private const int POR_PAGINA = 20;
+    private const int POR_PAGINA = 10;
 
     public function __construct(
         private AutorServico $servico,
@@ -22,12 +22,20 @@ final readonly class AutorController
     public function listar(Requisicao $requisicao): Resposta
     {
         $pagina = $requisicao->pagina();
+        $termo = mb_substr($requisicao->parametro('q'), 0, 100);
 
         return $this->view->pagina('autores/lista', [
             'titulo' => 'Autores',
-            'autores' => $this->servico->listar(self::POR_PAGINA, $pagina),
-            'pagina' => $pagina,
-            'totalPaginas' => max(1, (int) ceil($this->servico->contar() / self::POR_PAGINA)),
+            'termo' => $termo,
+            'autores' => $this->servico->listar(self::POR_PAGINA, $pagina, $termo),
+            'paginacao' => [
+                'rota' => '/autores',
+                'rotulo' => 'autores',
+                'pagina' => $pagina,
+                'porPagina' => self::POR_PAGINA,
+                'total' => $this->servico->contar($termo),
+                'filtros' => ['q' => $termo],
+            ],
         ]);
     }
 

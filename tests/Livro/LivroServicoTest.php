@@ -41,7 +41,7 @@ final class LivroServicoTest extends TestCase
         $erro = $this->capturarErro(fn() => $this->servico->criar([]));
 
         self::assertSame(422, $erro->status);
-        self::assertCount(7, $erro->erros);
+        self::assertCount(8, $erro->erros);
     }
 
     public function testAutorInexistenteRetorna422(): void
@@ -49,6 +49,14 @@ final class LivroServicoTest extends TestCase
         $erro = $this->capturarErro(fn() => $this->servico->criar($this->dados(['autores' => ['99']])));
 
         self::assertSame('Autor inexistente.', $erro->erros['autores']);
+    }
+
+    public function testIsbnDuplicadoRetorna422(): void
+    {
+        $this->servico->criar($this->dados());
+        $erro = $this->capturarErro(fn() => $this->servico->criar($this->dados()));
+
+        self::assertSame('Já existe um livro com esse ISBN.', $erro->erros['isbn']);
     }
 
     public function testBuscarInexistenteRetorna404(): void
@@ -68,6 +76,7 @@ final class LivroServicoTest extends TestCase
     {
         return [
             'titulo' => 'Primeiro Livro',
+            'isbn' => '9788535902771',
             'editora' => 'Editora Teste',
             'edicao' => '1',
             'ano' => '2026',

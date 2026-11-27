@@ -1,6 +1,7 @@
 <?php
 $campos = [
     'titulo' => ['Título', 'col-md-8', 'maxlength="40"'],
+    'isbn' => ['ISBN', 'col-md-4', 'maxlength="17"'],
     'editora' => ['Editora', 'col-md-4', 'maxlength="40"'],
     'edicao' => ['Edição', 'col-md-4', 'inputmode="numeric" maxlength="4"'],
     'ano' => ['Ano de publicação', 'col-md-4', 'inputmode="numeric" maxlength="4"'],

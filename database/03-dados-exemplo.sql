@@ -1,7 +1,7 @@
 SET NAMES utf8mb4;
 
-INSERT INTO Livro (CodLivro, Titulo, Editora, Edicao, AnoPublicacao, Valor)
-VALUES (1, 'Não Sei, Só Sei Que Foi Assim', 'Taperoa', 1, '2026', 39.90);
+INSERT INTO Livro (CodLivro, Titulo, ISBN, Editora, Edicao, AnoPublicacao, Valor)
+VALUES (1, 'Não Sei, Só Sei Que Foi Assim', '9788535902778', 'Taperoa', 1, '2026', 39.90);
 
 INSERT INTO Autor (CodAutor, Nome)
 VALUES
